@@ -7,18 +7,19 @@ const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const handleEnter = async () => {
+  const handleEnter = () => {
     setHasEntered(true);
     
-    if (audioRef.current) {
-      try {
+    setTimeout(() => {
+      if (audioRef.current) {
         audioRef.current.currentTime = 12;
-        await audioRef.current.play();
-        setIsPlaying(true);
-      } catch (error) {
-        console.error('Audio playback failed:', error);
+        audioRef.current.play().then(() => {
+          setIsPlaying(true);
+        }).catch((error) => {
+          console.error('Audio playback failed:', error);
+        });
       }
-    }
+    }, 100);
   };
 
   const toggleAudio = () => {
@@ -94,12 +95,12 @@ const Index = () => {
 
       <button
         onClick={toggleAudio}
-        className="absolute bottom-8 right-8 z-10 w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all flex items-center justify-center group"
+        className="absolute bottom-1/2 right-8 translate-y-1/2 z-10 w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all flex items-center justify-center group"
         aria-label={isPlaying ? 'Пауза' : 'Воспроизвести'}
       >
         <Icon 
           name={isPlaying ? 'Pause' : 'Play'} 
-          size={24} 
+          size={28} 
           className="text-white group-hover:scale-110 transition-transform"
         />
       </button>
